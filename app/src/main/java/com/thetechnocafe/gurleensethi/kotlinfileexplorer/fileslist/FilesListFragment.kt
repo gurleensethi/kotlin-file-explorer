@@ -26,6 +26,8 @@ class FilesListFragment : Fragment() {
 
     interface OnItemClickListener {
         fun onClick(fileModel: FileModel)
+
+        fun onLongClick(fileModel: FileModel)
     }
 
     companion object {
@@ -82,10 +84,7 @@ class FilesListFragment : Fragment() {
         }
 
         mFilesAdapter.onItemLongClickListener = {
-            val bottomSheet = BottomSheetDialog(activity!!)
-            val view = LayoutInflater.from(context).inflate(R.layout.dialog_file_options, null)
-            bottomSheet.setContentView(view)
-            bottomSheet.show()
+            mCallback.onLongClick(it)
         }
 
         updateDate()

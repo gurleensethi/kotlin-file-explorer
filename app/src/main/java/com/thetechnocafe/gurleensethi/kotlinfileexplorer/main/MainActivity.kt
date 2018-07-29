@@ -80,6 +80,10 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
         }
     }
 
+    override fun onLongClick(fileModel: FileModel) {
+
+    }
+
     private fun addFileFragment(fileModel: FileModel) {
         val filesListFragment = FilesListFragment.build {
             path = fileModel.path

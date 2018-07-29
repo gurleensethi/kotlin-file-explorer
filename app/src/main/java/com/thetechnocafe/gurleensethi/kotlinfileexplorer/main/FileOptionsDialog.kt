@@ -1,13 +1,11 @@
-package com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist
+package com.thetechnocafe.gurleensethi.kotlinfileexplorer.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.R
-import com.thetechnocafe.gurleensethi.kotlinfileexplorer.models.FileModel
 
 class FileOptionsDialog() : BottomSheetDialogFragment() {
 
