@@ -32,7 +32,7 @@ fun convertFileSizeToMB(sizeInBytes: Long): Double {
     return (sizeInBytes.toDouble()) / (1024 * 1024)
 }
 
-fun createNewFile(fileName: String, path: String, callback: (result:Boolean, message: String) -> Unit){
+fun createNewFile(fileName: String, path: String, callback: (result: Boolean, message: String) -> Unit) {
     val fileAlreadyExists = File(path).listFiles().map { it.name }.contains(fileName)
     if (fileAlreadyExists) {
         callback(false, "'${fileName}' already exists.")
@@ -47,6 +47,26 @@ fun createNewFile(fileName: String, path: String, callback: (result:Boolean, mes
             }
         } catch (e: Exception) {
             callback(false, "Unable to create file. Please try again.")
+            e.printStackTrace()
+        }
+    }
+}
+
+fun createNewFolder(folderName: String, path: String, callback: (result: Boolean, message: String) -> Unit) {
+    val folderAlreadyExists = File(path).listFiles().map { it.name }.contains(folderName)
+    if (folderAlreadyExists) {
+        callback(false, "'${folderName}' already exists.")
+    } else {
+        val file = File(path, folderName)
+        try {
+            val result = file.mkdir()
+            if (result) {
+                callback(result, "Folder '${folderName}' created successfully.")
+            } else {
+                callback(result, "Unable to create folder '${folderName}'.")
+            }
+        } catch (e: Exception) {
+            callback(false, "Unable to create folder. Please try again.")
             e.printStackTrace()
         }
     }

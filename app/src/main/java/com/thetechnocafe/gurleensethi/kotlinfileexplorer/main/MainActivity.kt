@@ -17,6 +17,7 @@ import com.thetechnocafe.gurleensethi.kotlinfileexplorer.common.FileType
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist.FilesListFragment
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.models.FileModel
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createNewFile
+import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createNewFolder
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createShortSnackbar
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.launchFileIntent
 import kotlinx.android.synthetic.main.activity_main.*
@@ -127,11 +128,10 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
         view.createButton.setOnClickListener {
             val fileName = view.nameEditText.text.toString()
             if (fileName.isNotEmpty()) {
-                createNewFile(fileName, backStackManager.top.path) { result, message ->
+                createNewFile(fileName, backStackManager.top.path) { _, message ->
                     bottomSheetDialog.dismiss()
                     coordinatorLayout.createShortSnackbar(message)
-                    val fragment = supportFragmentManager.findFragmentById(R.id.container) as FilesListFragment
-                    fragment.updateDate()
+                    updateContentOfCurrentFragment()
                 }
             }
         }
@@ -140,11 +140,29 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
     }
 
     private fun createNewFolderInCurrentDirectory() {
-
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_enter_name, null)
+        view.createButton.setOnClickListener {
+            val fileName = view.nameEditText.text.toString()
+            if (fileName.isNotEmpty()) {
+                createNewFolder(fileName, backStackManager.top.path) { _, message ->
+                    bottomSheetDialog.dismiss()
+                    coordinatorLayout.createShortSnackbar(message)
+                    updateContentOfCurrentFragment()
+                }
+            }
+        }
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
     }
 
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+    }
+
+    private fun updateContentOfCurrentFragment() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.container) as FilesListFragment
+        fragment.updateDate()
     }
 }
