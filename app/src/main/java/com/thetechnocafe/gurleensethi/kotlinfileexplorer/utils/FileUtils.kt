@@ -74,3 +74,12 @@ fun createNewFolder(folderName: String, path: String, callback: (result: Boolean
         }
     }
 }
+
+fun deleteFile(path: String) {
+    val file = File(path)
+    if (file.isDirectory) {
+        file.deleteRecursively()
+    } else {
+        file.delete()
+    }
+}

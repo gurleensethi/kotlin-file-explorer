@@ -20,10 +20,15 @@ import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createNewFile
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createNewFolder
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createShortSnackbar
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.launchFileIntent
+import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.deleteFile as FileUtilsDeleteFile
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_enter_name.view.*
 
 class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener {
+
+    companion object {
+        private const val OPTIONS_DIALOG_TAG: String = "com.thetechnocafe.gurleensethi.kotlinfileexplorer.main.options_dialog"
+    }
 
     private val backStackManager = BackStackManager()
     private lateinit var mBreadcrumbRecyclerAdapter: BreadcrumbRecyclerAdapter
@@ -81,7 +86,13 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
     }
 
     override fun onLongClick(fileModel: FileModel) {
-
+        val optionsDialog = FileOptionsDialog.build {}
+        optionsDialog.onDeleteClickListener = {
+            FileUtilsDeleteFile(fileModel.path)
+            updateContentOfCurrentFragment()
+            coordinatorLayout.createShortSnackbar("'${fileModel.name}' deleted successfully.")
+        }
+        optionsDialog.show(supportFragmentManager, OPTIONS_DIALOG_TAG)
     }
 
     private fun addFileFragment(fileModel: FileModel) {
