@@ -16,9 +16,12 @@ fun getFileModelsFromFiles(files: List<File>): List<FileModel> {
     }
 }
 
-fun getFilesFromPath(path: String, showHiddenFiles: Boolean = false): List<File> {
+fun getFilesFromPath(path: String, showHiddenFiles: Boolean = false, onlyFolders: Boolean = false): List<File> {
     val file = File(path)
-    return file.listFiles().filter { showHiddenFiles || !it.name.startsWith(".") }.toList()
+    return file.listFiles()
+            .filter { showHiddenFiles || !it.name.startsWith(".") }
+            .filter { !onlyFolders || it.isDirectory }
+            .toList()
 }
 
 fun Context.launchFileIntent(fileModel: FileModel) {
