@@ -5,22 +5,35 @@
     tools:context=".main.MainActivity">
 
     <item
-        android:icon="@drawable/ic_folder_grey_24dp"
+        android:id="@+id/menuCancel"
+        android:icon="@drawable/ic_close_grey_24dp"
+        android:title="Cancel"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menuPasteFile"
+        android:icon="@drawable/ic_content_paste_grey_24dp"
+        android:title="Paste"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/subMenu"
+        android:icon="@drawable/ic_folder_grey_24dp"
         android:title="Options"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/menuNewFile"
-                android:title="New File"
                 android:icon="@drawable/ic_insert_drive_file_grey_24dp"
-                app:showAsAction="never"/>
+                android:title="New File"
+                app:showAsAction="never" />
             <item
                 android:id="@+id/menuNewFolder"
-                android:title="New Folder"
                 android:icon="@drawable/ic_create_new_folder_grey_24dp"
-                app:showAsAction="never"/>
+                android:title="New Folder"
+                app:showAsAction="never" />
         </menu>
     </item>
+
 </menu>

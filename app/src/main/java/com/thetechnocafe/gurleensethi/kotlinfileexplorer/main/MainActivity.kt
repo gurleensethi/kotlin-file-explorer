@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
 
     private val backStackManager = BackStackManager()
     private lateinit var mBreadcrumbRecyclerAdapter: BreadcrumbRecyclerAdapter
+    private var isCopyModeActive: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,11 +87,18 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
 
     override fun onLongClick(fileModel: FileModel) {
         val optionsDialog = FileOptionsDialog.build {}
+
         optionsDialog.onDeleteClickListener = {
             FileUtilsDeleteFile(fileModel.path)
             updateContentOfCurrentFragment()
             coordinatorLayout.createShortSnackbar("'${fileModel.name}' deleted successfully.")
         }
+
+        optionsDialog.onCopyClickListener = {
+            isCopyModeActive = true
+            invalidateOptionsMenu()
+        }
+
         optionsDialog.show(supportFragmentManager, OPTIONS_DIALOG_TAG)
     }
 
@@ -117,6 +124,12 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
     }
 
     override fun onBackPressed() {
+        if (isCopyModeActive) {
+            isCopyModeActive = false
+            invalidateOptionsMenu()
+            return
+        }
+
         super.onBackPressed()
         backStackManager.popFromStack()
         if (supportFragmentManager.backStackEntryCount == 0) {
@@ -126,6 +139,15 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+
+        val subMenu = menu?.findItem(R.id.subMenu)
+        val pasteItem = menu?.findItem(R.id.menuPasteFile)
+        val cancelItem = menu?.findItem(R.id.menuCancel)
+
+        subMenu?.isVisible = !isCopyModeActive
+        pasteItem?.isVisible = isCopyModeActive
+        cancelItem?.isVisible = isCopyModeActive
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -133,6 +155,10 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
         when (item?.itemId) {
             R.id.menuNewFile -> createNewFileInCurrentDirectory()
             R.id.menuNewFolder -> createNewFolderInCurrentDirectory()
+            R.id.menuCancel -> {
+                isCopyModeActive = false
+                invalidateOptionsMenu()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

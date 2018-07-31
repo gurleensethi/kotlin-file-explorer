@@ -16,7 +16,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
         android:id="@+id/deleteTextView"
         style="@style/FileDialogOption"
@@ -30,5 +29,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fileOptionsTextView" />
 
+    <TextView
+        android:id="@+id/copyTextView"
+        style="@style/FileDialogOption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_content_copy_grey_24dp"
+        android:drawableStart="@drawable/ic_content_copy_grey_24dp"
+        android:text="Copy"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/deleteTextView" />
 
 </android.support.constraint.ConstraintLayout>

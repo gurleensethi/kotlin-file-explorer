@@ -1,23 +1,19 @@
 package com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist
 
 import android.content.Context
+import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Environment
-import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.text.style.TtsSpan.ARG_PATH
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.R
-import com.thetechnocafe.gurleensethi.kotlinfileexplorer.common.FileType
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.models.FileModel
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.getFileModelsFromFiles
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.getFilesFromPath
 import kotlinx.android.synthetic.main.fragment_files_list.*
-import java.io.File
 
 class FilesListFragment : Fragment() {
     private lateinit var mFilesAdapter: FilesRecyclerAdapter
@@ -55,6 +51,10 @@ class FilesListFragment : Fragment() {
         } catch (e: Exception) {
             throw Exception("${context} should implement FilesListFragment.OnItemCLickListener")
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

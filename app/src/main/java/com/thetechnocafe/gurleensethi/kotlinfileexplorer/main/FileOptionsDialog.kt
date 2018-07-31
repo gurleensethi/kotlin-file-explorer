@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.dialog_file_options.*
 class FileOptionsDialog : BottomSheetDialogFragment() {
 
     var onDeleteClickListener: (() -> Unit)? = null
+    var onCopyClickListener: (() -> Unit)? = null
 
     companion object {
         fun build(block: Builder.() -> Unit): FileOptionsDialog = Builder().apply(block).build()
@@ -39,6 +40,11 @@ class FileOptionsDialog : BottomSheetDialogFragment() {
     private fun initViews() {
         deleteTextView.setOnClickListener {
             onDeleteClickListener?.invoke()
+            dismiss()
+        }
+
+        copyTextView.setOnClickListener {
+            onCopyClickListener?.invoke()
             dismiss()
         }
     }
