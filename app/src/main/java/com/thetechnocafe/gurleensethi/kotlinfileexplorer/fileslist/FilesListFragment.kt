@@ -27,7 +27,7 @@ class FilesListFragment : Fragment() {
     }
 
     companion object {
-        private const val ARG_PATH: String = "package com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist.path"
+        private const val ARG_PATH: String = "com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist.path"
         fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
     }
 

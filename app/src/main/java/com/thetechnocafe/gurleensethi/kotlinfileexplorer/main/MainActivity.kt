@@ -35,9 +35,7 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.addFlags(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-        }
+        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.or(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {

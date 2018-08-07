@@ -27,7 +27,7 @@ fun getFilesFromPath(path: String, showHiddenFiles: Boolean = false, onlyFolders
 fun Context.launchFileIntent(fileModel: FileModel) {
     val intent = Intent(Intent.ACTION_VIEW)
     intent.data = FileProvider.getUriForFile(this, packageName, File(fileModel.path))
-    intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+    intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION.or(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     startActivity(Intent.createChooser(intent, "Select Application"))
 }
 
