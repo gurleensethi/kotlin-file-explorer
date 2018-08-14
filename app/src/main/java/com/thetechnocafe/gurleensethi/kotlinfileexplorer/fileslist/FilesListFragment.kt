@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.R
+import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileservice.FileChangeBroadcastReceiver
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.models.FileModel
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.getFileModelsFromFiles
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.getFilesFromPath
@@ -19,6 +20,7 @@ class FilesListFragment : Fragment() {
     private lateinit var mFilesAdapter: FilesRecyclerAdapter
     private lateinit var PATH: String
     private lateinit var mCallback: OnItemClickListener
+    private lateinit var mFileChangeBroadcastReceiver: FileChangeBroadcastReceiver
 
     interface OnItemClickListener {
         fun onClick(fileModel: FileModel)
@@ -55,14 +57,6 @@ class FilesListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_files_list, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val filePath = arguments?.getString(ARG_PATH)
         if (filePath == null) {
@@ -71,6 +65,27 @@ class FilesListFragment : Fragment() {
         }
         PATH = filePath
 
+        mFileChangeBroadcastReceiver = FileChangeBroadcastReceiver(PATH) {
+            updateDate()
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_files_list, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.registerReceiver(mFileChangeBroadcastReceiver, IntentFilter(getString(R.string.file_change_broadcast)))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        context?.unregisterReceiver(mFileChangeBroadcastReceiver)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViews()
     }
 

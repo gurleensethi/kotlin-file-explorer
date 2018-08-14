@@ -1,5 +1,6 @@
 package com.thetechnocafe.gurleensethi.kotlinfileexplorer.main
 
+import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,12 +8,14 @@ import android.os.Environment
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.R
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.common.FileType
+import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileservice.FileIntentService
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist.FilesListFragment
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.models.FileModel
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.utils.createNewFile
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
     private val backStackManager = BackStackManager()
     private lateinit var mBreadcrumbRecyclerAdapter: BreadcrumbRecyclerAdapter
     private var isCopyModeActive: Boolean = false
+    private var selectedFileModel: FileModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +98,7 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
 
         optionsDialog.onCopyClickListener = {
             isCopyModeActive = true
+            selectedFileModel = fileModel
             invalidateOptionsMenu()
         }
 
@@ -154,6 +159,16 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
             R.id.menuNewFile -> createNewFileInCurrentDirectory()
             R.id.menuNewFolder -> createNewFolderInCurrentDirectory()
             R.id.menuCancel -> {
+                isCopyModeActive = false
+                invalidateOptionsMenu()
+            }
+            R.id.menuPasteFile -> {
+                val intent = Intent(this, FileIntentService::class.java)
+                intent.action = FileIntentService.ACTION_COPY
+                intent.putExtra(FileIntentService.EXTRA_FILE_SOURCE_PATH, selectedFileModel?.path)
+                intent.putExtra(FileIntentService.EXTRA_FILE_DESTINATION_PATH, backStackManager.top.path)
+                startService(intent)
+
                 isCopyModeActive = false
                 invalidateOptionsMenu()
             }
