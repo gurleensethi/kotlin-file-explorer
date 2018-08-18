@@ -21,7 +21,7 @@ class BackStackManager {
     }
 
     fun popFromStackTill(fileModel: FileModel) {
-        files = files.subList(0, files.indexOf(files.find { it.path == fileModel.path }) + 1)
+        files = files.subList(0, files.indexOf(fileModel) + 1)
         onStackChangeListener?.invoke(files)
     }
 }

@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.R
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.common.FileType
+import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileservice.FileChangeBroadcastReceiver
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileservice.FileIntentService
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.fileslist.FilesListFragment
 import com.thetechnocafe.gurleensethi.kotlinfileexplorer.models.FileModel
@@ -216,7 +217,11 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnItemClickListener 
     }
 
     private fun updateContentOfCurrentFragment() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.container) as FilesListFragment
-        fragment.updateDate()
+//        val fragment = supportFragmentManager.findFragmentById(R.id.container) as FilesListFragment
+//        fragment.updateDate()
+        val broadcastIntent = Intent()
+        broadcastIntent.action = applicationContext.getString(R.string.file_change_broadcast)
+        broadcastIntent.putExtra(FileChangeBroadcastReceiver.EXTRA_PATH, backStackManager.top.path)
+        sendBroadcast(broadcastIntent)
     }
 }
